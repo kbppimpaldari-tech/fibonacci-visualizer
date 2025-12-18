@@ -129,7 +129,7 @@
         function renderTable() {
             document.getElementById('fibTableBody').innerHTML = currentSequence.map((val, i) => `
                 <tr class="hover:bg-indigo-50/50 border-b border-slate-50">
-                    <td class="p-4 text-sm font-medium text-slate-400">#${i}</td>
+                    <td class="p-4 text-sm font-medium text-slate-400">#${i+1}</td>
                     <td class="p-4 text-sm font-mono font-bold text-indigo-600">${val.toLocaleString()}</td>
                 </tr>
             `).join('');
@@ -241,7 +241,7 @@
         }
 
         function downloadCSV() {
-            const csv = "Index,Value\n" + currentSequence.map((v, i) => `${i},${v}`).join("\n");
+            const csv = "Index,Value\n" + currentSequence.map((v, i) => `${i+1},${v}`).join("\n");
             const link = document.createElement("a");
             link.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
             link.download = 'fibonacci_inverted.csv';
@@ -251,6 +251,7 @@
 </body>
 
 </html>
+
 
 
 

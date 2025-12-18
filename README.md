@@ -4,7 +4,7 @@ An interactive, educational web application designed to visualize the Fibonacci 
 
 🚀 Live Demo
 
-https://mangesh-nikam.github.io/fibonacci-visualizer/
+https://kbppimpaldari-tech.github.io/fibonacci-visualizer/
 
 📖 About the Project
 

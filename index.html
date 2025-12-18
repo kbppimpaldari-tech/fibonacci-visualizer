@@ -119,6 +119,7 @@
             let n = parseInt(document.getElementById('fibInput').value);
             if (isNaN(n) || n < 2) n = 2;
 
+            // CHANGE: Updated starting values to [0, 1] as per user request
             const sequence = [0, 1];
             for (let i = 2; i < n; i++) sequence.push(sequence[i - 1] + sequence[i - 2]);
             currentSequence = sequence;
@@ -129,7 +130,7 @@
         function renderTable() {
             document.getElementById('fibTableBody').innerHTML = currentSequence.map((val, i) => `
                 <tr class="hover:bg-indigo-50/50 border-b border-slate-50">
-                    <td class="p-4 text-sm font-medium text-slate-400">#${i+1}</td>
+                    <td class="p-4 text-sm font-medium text-slate-400">#${i + 1}</td>
                     <td class="p-4 text-sm font-mono font-bold text-indigo-600">${val.toLocaleString()}</td>
                 </tr>
             `).join('');
@@ -137,12 +138,15 @@
 
         function getSpiralLayout(seq) {
             const layout = [];
-            let rect = { left: 0, top: 0, right: 1, bottom: 1 };
-            
-            layout.push({ x: 0, y: 0, size: 1, dir: 0 });
+            // We filter out 0 for the geometric layout because a square with size 0 cannot be drawn
+            const geometricSeq = seq.filter(v => v > 0);
+            if (geometricSeq.length === 0) return { layout: [], rect: { left:0, top:0, right:1, bottom:1 } };
 
-            for (let i = 1; i < seq.length; i++) {
-                const size = seq[i];
+            let rect = { left: 0, top: 0, right: geometricSeq[0], bottom: geometricSeq[0] };
+            layout.push({ x: 0, y: 0, size: geometricSeq[0], dir: 0 });
+
+            for (let i = 1; i < geometricSeq.length; i++) {
+                const size = geometricSeq[i];
                 let x, y;
                 const dir = i % 4;
 
@@ -185,6 +189,7 @@
             if (currentSequence.length === 0) return;
 
             const { layout, rect } = getSpiralLayout(currentSequence);
+            if (layout.length === 0) return;
 
             const spiralW = rect.right - rect.left;
             const spiralH = rect.bottom - rect.top;
@@ -215,19 +220,19 @@
                 let arcCX, arcCY, startAng, endAng;
                 
                 switch(dir) {
-                    case 0: // Square on Right.
+                    case 0: 
                         arcCX = x; arcCY = y + size;
                         startAng = 0; endAng = 1.5 * Math.PI;
                         break;
-                    case 1: // Square on Bottom.
+                    case 1: 
                         arcCX = x; arcCY = y;
                         startAng = 0.5 * Math.PI; endAng = 0;
                         break;
-                    case 2: // Square on Left.
+                    case 2: 
                         arcCX = x + size; arcCY = y;
                         startAng = Math.PI; endAng = 0.5 * Math.PI;
                         break;
-                    case 3: // Square on Top.
+                    case 3: 
                         arcCX = x + size; arcCY = y + size;
                         startAng = 1.5 * Math.PI; endAng = Math.PI;
                         break;
@@ -241,16 +246,17 @@
         }
 
         function downloadCSV() {
-            const csv = "Index,Value\n" + currentSequence.map((v, i) => `${i+1},${v}`).join("\n");
+            const csv = "Index,Value\n" + currentSequence.map((v, i) => `${i + 1},${v}`).join("\n");
             const link = document.createElement("a");
             link.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-            link.download = 'fibonacci_inverted.csv';
+            link.download = 'fibonacci_data.csv';
             link.click();
         }
     </script>
 </body>
 
 </html>
+
 
 
 
